@@ -1,25 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import GenerateSimpson from './Generate'
+import DisplaySimpson from './DisplaySimpson'
+
 
 class App extends Component {
+
+  state = {
+    simpson:  []
+  }
+
+  getSimpson() {
+    // Récupération de l'employé via fetch
+    fetch("https://thesimpsonsquoteapi.glitch.me/quotes")
+      .then(response  =>  response.json())
+      .then(data  => {
+        // Une fois les données récupérées, on va mettre à jour notre state avec les nouvelles données
+        this.setState({
+          simpson:  data[0],
+        });
+    });
+}
+
+componentDidMount() {
+  this.getSimpson()
+}
+
+
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <GenerateSimpson  selectSimpson={() =>  this.getSimpson()} />
+      <DisplaySimpson  simpsonPass={this.state.simpson}  />
       </div>
     );
   }
